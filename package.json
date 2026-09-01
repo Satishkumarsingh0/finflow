@@ -1,0 +1,23 @@
+{
+  "name": "finflow-client",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "highcharts": "^13.0.2",
+    "highcharts-react-official": "^3.2.3",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.18.3",
+    "vite": "^6.0.5",
+    "xlsx": "^0.18.5"
+  }
+}
