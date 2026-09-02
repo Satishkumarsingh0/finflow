@@ -10,6 +10,8 @@ export default function LoginPage() {
   const location = useLocation();
 
   const [forgotMode, setForgotMode] = useState(false);
+  const [resetToken, setResetToken] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [email, setEmail] = useState('admin@finflow.test');
   const [password, setPassword] = useState('Admin@123');
   const [loading, setLoading] = useState(false);
@@ -25,9 +27,16 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      if (forgotMode) {
+      if (resetToken) {
+        await authApi.resetPassword({ token: resetToken, password: newPassword });
+        setSuccessMsg('Password updated. You can now sign in.');
+        setForgotMode(false);
+        setResetToken('');
+        setNewPassword('');
+      } else if (forgotMode) {
         const res = await authApi.forgotPassword(email);
         setSuccessMsg(res.message || 'Password reset link sent to your email.');
+        if (res.token) setResetToken(res.token);
       } else {
         const authData = await authApi.login({ email, password });
         login(authData);
@@ -71,9 +80,11 @@ export default function LoginPage() {
         <div className="login-card">
           <div className="login-card-header">
             <p className="eyebrow">WELCOME BACK</p>
-            <h2>{forgotMode ? 'Recover your password' : 'Sign in to Finflow'}</h2>
+            <h2>{resetToken ? 'Set a new password' : forgotMode ? 'Recover your password' : 'Sign in to Finflow'}</h2>
             <p className="muted">
-              {forgotMode
+              {resetToken
+                ? 'Choose a new password for your account.'
+                : forgotMode
                 ? 'Enter your registered email address to receive reset instructions.'
                 : 'Enter your credentials to access your financial workspace.'}
             </p>
@@ -94,7 +105,7 @@ export default function LoginPage() {
           )}
 
           <form onSubmit={handleSubmit} className="login-form">
-            <label>
+            {!resetToken && <label>
               Email address
               <input
                 type="email"
@@ -104,18 +115,19 @@ export default function LoginPage() {
                 required
                 autoComplete="email"
               />
-            </label>
+            </label>}
 
-            {!forgotMode && (
+            {(!forgotMode || resetToken) && (
               <label>
-                Password
+                {resetToken ? 'New password' : 'Password'}
                 <input
                   type="password"
                   placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={resetToken ? newPassword : password}
+                  onChange={(e) => resetToken ? setNewPassword(e.target.value) : setPassword(e.target.value)}
                   required
-                  autoComplete="current-password"
+                  minLength={resetToken ? 6 : undefined}
+                  autoComplete={resetToken ? 'new-password' : 'current-password'}
                 />
               </label>
             )}
@@ -126,11 +138,13 @@ export default function LoginPage() {
                 className="link-btn text-left"
                 onClick={() => {
                   setForgotMode(!forgotMode);
+                  setResetToken('');
+                  setNewPassword('');
                   setError('');
                   setSuccessMsg('');
                 }}
               >
-                {forgotMode ? (
+                {forgotMode || resetToken ? (
                   <span className="flex-center">
                     <ArrowLeft size={14} /> Back to sign in
                   </span>
@@ -141,7 +155,7 @@ export default function LoginPage() {
             </div>
 
             <button type="submit" className="primary full" disabled={loading}>
-              <span>{loading ? 'Please wait…' : forgotMode ? 'Send reset link' : 'Sign in'}</span>
+              <span>{loading ? 'Please wait…' : resetToken ? 'Update password' : forgotMode ? 'Send reset link' : 'Sign in'}</span>
               {!loading && <ChevronRight size={17} />}
             </button>
           </form>

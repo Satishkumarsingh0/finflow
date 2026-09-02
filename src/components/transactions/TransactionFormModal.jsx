@@ -23,6 +23,20 @@ export default function TransactionFormModal({ onClose, initialPartyId = '' }) {
   });
   const [file, setFile] = useState(null);
 
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0] || null;
+    if (!selectedFile) return setFile(null);
+    const isAccepted = selectedFile.type === 'application/pdf' || selectedFile.type.startsWith('image/');
+    if (!isAccepted || selectedFile.size > 5 * 1024 * 1024) {
+      setFile(null);
+      setError(!isAccepted ? 'Please attach an image or PDF document.' : 'Attachment must be 5 MB or smaller.');
+      e.target.value = '';
+      return;
+    }
+    setError('');
+    setFile(selectedFile);
+  };
+
   useEffect(() => {
     partiesApi.getAll()
       .then((data) => {
@@ -186,7 +200,7 @@ export default function TransactionFormModal({ onClose, initialPartyId = '' }) {
           <input
             type="file"
             accept="image/*,.pdf"
-            onChange={(e) => setFile(e.target.files[0] || null)}
+            onChange={handleFileChange}
           />
           {file && (
             <span className="file-selected">

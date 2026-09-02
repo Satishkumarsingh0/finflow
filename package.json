@@ -4,8 +4,16 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build"
+    "dev": "npm run dev:local",
+    "dev:local": "vite --mode localdev",
+    "dev:development": "vite --mode development",
+    "dev:test": "vite --mode test",
+    "build": "npm run build:production",
+    "build:local": "vite build --mode localdev",
+    "build:development": "vite build --mode development",
+    "build:test": "vite build --mode test",
+    "build:production": "vite build --mode production",
+    "preview:production": "vite preview --mode production --port 4173"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.3.4",

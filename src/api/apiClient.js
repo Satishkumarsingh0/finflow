@@ -1,7 +1,7 @@
 /**
  * Finflow Central API Client
  */
-export const API_BASE = '/api';
+export const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
 export const api = async (endpoint, options = {}) => {
   const token = localStorage.getItem('token');
