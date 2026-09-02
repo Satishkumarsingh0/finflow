@@ -12,8 +12,8 @@ export default function LoginPage() {
   const [forgotMode, setForgotMode] = useState(false);
   const [resetToken, setResetToken] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [email, setEmail] = useState('admin@finflow.test');
-  const [password, setPassword] = useState('Admin@123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
@@ -160,18 +160,6 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {!forgotMode && (
-            <div className="demo-credentials-box">
-              <p className="demo-title">Default Admin Demo:</p>
-              <div
-                className="demo-pill"
-                onClick={() => handleQuickDemo('admin@finflow.test', 'Admin@123')}
-                title="Click to fill credentials"
-              >
-                <span>admin@finflow.test</span> / <span>Admin@123</span>
-              </div>
-            </div>
-          )}
         </div>
       </section>
     </main>
