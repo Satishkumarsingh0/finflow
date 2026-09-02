@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/api/:path*",
+      "destination": "https://finflow-server-woad.vercel.app/api/:path*"
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
